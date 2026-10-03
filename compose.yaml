@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgis/postgis:18-3.6
+    container_name: blood-donor-postgres
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
