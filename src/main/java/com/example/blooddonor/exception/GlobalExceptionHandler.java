@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,6 +52,30 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(
+            IllegalArgumentException exception) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(response);
+    }
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalStateException(
+            IllegalStateException exception) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity
+                .badRequest()
                 .body(response);
     }
 }
