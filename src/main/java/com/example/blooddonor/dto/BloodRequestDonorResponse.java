@@ -14,6 +14,15 @@ public class BloodRequestDonorResponse {
     private LocalDateTime lastNotifiedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer offeredUnits;
+
+    public Integer getOfferedUnits() {
+        return offeredUnits;
+    }
+
+    public void setOfferedUnits(Integer offeredUnits) {
+        this.offeredUnits = offeredUnits;
+    }
 
     public Long getId() {
         return id;

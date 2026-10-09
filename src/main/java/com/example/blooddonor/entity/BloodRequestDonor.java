@@ -45,6 +45,8 @@ public class BloodRequestDonor {
     @Column(nullable = false, length = 30)
     private BloodRequestDonorStatus status =
             BloodRequestDonorStatus.NOTIFIED;
+    @Column(name = "offered_units")
+    private Integer offeredUnits;
 
     @Column(name = "notification_count", nullable = false)
     private Integer notificationCount = 1;
@@ -134,5 +136,12 @@ public class BloodRequestDonor {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+    public Integer getOfferedUnits() {
+        return offeredUnits;
+    }
+
+    public void setOfferedUnits(Integer offeredUnits) {
+        this.offeredUnits = offeredUnits;
     }
 }

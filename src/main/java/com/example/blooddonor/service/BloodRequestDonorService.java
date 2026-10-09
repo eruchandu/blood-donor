@@ -6,7 +6,7 @@ import com.example.blooddonor.repository.BloodRequestDonorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.blooddonor.dto.BloodRequestDonorResponse;
-
+import com.example.blooddonor.dto.BloodRequestDonorResponseRequest;
 @Service
 public class BloodRequestDonorService {
 
@@ -23,7 +23,7 @@ public class BloodRequestDonorService {
     public BloodRequestDonorResponse updateDonorResponse(
             Long relationshipId,
             Long donorId,
-            BloodRequestDonorStatus newStatus) {
+            BloodRequestDonorResponseRequest request) {
 
         BloodRequestDonor relationship =
                 bloodRequestDonorRepository
@@ -35,18 +35,31 @@ public class BloodRequestDonorService {
 
         if (relationship.getStatus()
                 != BloodRequestDonorStatus.NOTIFIED) {
-
             throw new IllegalStateException(
                     "Donor has already responded to this blood request"
             );
         }
 
+        BloodRequestDonorStatus newStatus = request.getStatus();
+
         if (newStatus != BloodRequestDonorStatus.ACCEPTED
                 && newStatus != BloodRequestDonorStatus.REJECTED) {
-
             throw new IllegalArgumentException(
                     "Donor can only ACCEPT or REJECT a request"
             );
+        }
+
+        if (newStatus == BloodRequestDonorStatus.ACCEPTED) {
+            if (request.getOfferedUnits() == null
+                    || request.getOfferedUnits() <= 0) {
+                throw new IllegalArgumentException(
+                        "Offered units must be greater than zero when accepting"
+                );
+            }
+
+            relationship.setOfferedUnits(request.getOfferedUnits());
+        } else {
+            relationship.setOfferedUnits(null);
         }
 
         relationship.setStatus(newStatus);
@@ -84,6 +97,7 @@ public class BloodRequestDonorService {
         response.setUpdatedAt(
                 relationship.getUpdatedAt()
         );
+        response.setOfferedUnits(relationship.getOfferedUnits());
 
         return response;
     }
